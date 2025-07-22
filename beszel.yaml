@@ -1,0 +1,10 @@
+﻿version: '3'
+services:
+  beszel:
+    image: henrygd/beszel
+    container_name: beszel
+    restart: unless-stopped
+    ports:
+      - "8090:8090"
+    volumes:
+      - "/volume2/docker/Beszel/beszel_data:/beszel_data"
