@@ -1,0 +1,17 @@
+﻿version: '3'
+services:
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest  # 可替换为特定版本如 `4.6.7`
+    container_name: qbittorrent
+    environment:
+      - PUID=1000  # 宿主机的用户ID
+      - PGID=1001   # 宿主机的组ID
+      - WEBUI_PORT=18080  # Web界面访问端口
+    volumes:
+      - /volume1/docker/qbittorrent/config:/config  # 配置文件存储路径
+      - /volume1/VM/media:/volume1/VM/media  # 下载文件存储路径
+    ports:
+      - 18080:18080  # Web UI端口映射
+      - 6881:6881    # BT协议监听端口（TCP）
+      - 6881:6881/udp  # BT协议监听端口（UDP）
+    restart: unless-stopped
