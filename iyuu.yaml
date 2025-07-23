@@ -7,7 +7,7 @@ services:
             - ./iyuu:/iyuu
             - ./data:/data
         ports:
-            - "18780:8780"
+            - "8780:8780"
         container_name: IYUUPlus
         restart: always
         image: iyuucn/iyuuplus-dev:latest
