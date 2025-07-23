@@ -77,10 +77,16 @@ install_service() {
   LOCAL_IP=$(hostname -I | awk '{print $1}')
 
   # 提取 compose 中的第一个端口映射（host:container）
-  port_line=$(grep -E '^\s*-\s*[0-9]+:[0-9]+' "$dirname/$filename" | head -n 1)
+  host_port=$(awk '
+    $1 == "ports:" {in_ports=1; next}
+    in_ports && $1 ~ /^-/ {
+      split($2, a, ":");
+      print a[1];
+      exit
+    }
+  ' "$dirname/$filename")
 
-  if [[ -n "$port_line" ]]; then
-    host_port=$(echo "$port_line" | cut -d ':' -f1 | tr -dc '0-9')
+  if [[ -n "$host_port" ]]; then
     echo "🌐 $dirname 可访问：http://$LOCAL_IP:$host_port"
   else
     echo "ℹ️ $dirname 没有找到端口映射或无 Web 界面"
