@@ -76,28 +76,15 @@ install_service() {
   # 获取内网 IP 地址
   LOCAL_IP=$(hostname -I | awk '{print $1}')
 
-  # 根据服务名提示访问地址
-  case "$dirname" in
-    emby)
-      PORT=8096
-      echo "🌐 Emby 可访问：http://$LOCAL_IP:$PORT"
-      ;;
-    mp)
-      PORT=3000
-      echo "🌐 MoviePilot 可访问：http://$LOCAL_IP:$PORT"
-      ;;
-    iyuu)
-      PORT=8787
-      echo "🌐 IYUU 默认端口：$PORT（如有 Web 界面）"
-      ;;
-    qbittorrent)
-      PORT=8080
-      echo "🌐 qBittorrent 可访问：http://$LOCAL_IP:$PORT"
-      ;;
-    *)
-      echo "ℹ️ 服务 $dirname 已安装，但未配置访问端口提示。"
-      ;;
-  esac
+  # 提取 compose 中的第一个端口映射（host:container）
+  port_line=$(grep -E '^\s*-\s*[0-9]+:[0-9]+' "$dirname/$filename" | head -n 1)
+
+  if [[ -n "$port_line" ]]; then
+    host_port=$(echo "$port_line" | cut -d ':' -f1 | tr -dc '0-9')
+    echo "🌐 $dirname 可访问：http://$LOCAL_IP:$host_port"
+  else
+    echo "ℹ️ $dirname 没有找到端口映射或无 Web 界面"
+  fi
 
   echo
 }
