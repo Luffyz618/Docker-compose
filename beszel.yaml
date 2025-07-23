@@ -7,4 +7,4 @@ services:
     ports:
       - "8090:8090"
     volumes:
-      - "./Beszel/beszel_data:/beszel_data"
+      - "./beszel_data:/beszel_data"
