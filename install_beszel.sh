@@ -8,6 +8,6 @@ curl -O https://raw.githubusercontent.com/Luffyz618/Docker-compose/main/beszel.y
 
 # 启动容器
 echo "正在启动Beszel容器..."
- docker-compose up -d
+ docker-compose -f beszel.yaml up -d
 
 echo "安装完成！Beszel服务已在端口8090运行"
