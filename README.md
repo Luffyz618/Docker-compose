@@ -13,7 +13,7 @@
 
 ## 🚀 快速开始（推荐）
 
-复制并粘贴以下命令运行：
+ssh连接NAS或者VPS,cd命令进入docker文件夹。复制并粘贴以下命令运行：
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/Luffyz618/Docker-compose/main/install.sh)
