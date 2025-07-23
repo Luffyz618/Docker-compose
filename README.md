@@ -17,7 +17,8 @@
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/Luffyz618/Docker-compose/main/install.sh)
-📋 使用方法
+
+##📋 使用方法
 运行脚本后会提示你选择要安装的服务：
 请选择要安装的服务：
 0 - 安装全部
@@ -34,7 +35,8 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Luffyz618/Docker-compose/mai
 下载对应的 .yaml 配置文件
 
 执行 docker compose up -d 启动服务
-📎 前提条件
+
+##📎 前提条件
 无需手动安装 Docker 和 Docker Compose，脚本会自动检测系统环境并执行：
 
 如果未安装 Docker，会自动安装最新版
