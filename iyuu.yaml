@@ -4,10 +4,8 @@ services:
         stdin_open: true
         tty: true
         volumes:
-            - /volume2/docker/IYUUDEV/iyuu:/iyuu
-            - /volume2/docker/IYUUDEV/data:/data
-            - /volume2/@appdata/transmission/torrents:/tr  #tr种子路径，需要转种填写
-            - /volume2/@appdata/qBittorrent/qBittorrent_conf/data/BT_backup:/qb  #qb种子路径，需要转种填写
+            - ./iyuu:/iyuu
+            - ./data:/data
         ports:
             - "18780:8780"
         container_name: IYUUPlus
