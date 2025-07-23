@@ -17,5 +17,3 @@
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/Luffyz618/Docker-compose/main/install.sh)
-
-
