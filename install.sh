@@ -76,11 +76,12 @@ install_service() {
   # 获取内网 IP 地址
   LOCAL_IP=$(hostname -I | awk '{print $1}')
 
-  # 提取 compose 中的第一个端口映射（host:container）
+  # 提取 compose 中的第一个端口映射（兼容引号）
   host_port=$(awk '
-    $1 == "ports:" {in_ports=1; next}
-    in_ports && $1 ~ /^-/ {
-      split($2, a, ":");
+    /^\s*ports:\s*$/ {in_ports=1; next}
+    in_ports && /^\s*-\s*["]?[0-9]+:[0-9]+["]?/ {
+      gsub(/[^0-9:]/, "", $0);
+      split($0, a, ":");
       print a[1];
       exit
     }
