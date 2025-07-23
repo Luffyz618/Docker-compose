@@ -76,16 +76,9 @@ install_service() {
   # 获取内网 IP 地址
   LOCAL_IP=$(hostname -I | awk '{print $1}')
 
-  # 提取 compose 中的第一个端口映射（兼容引号）
-  host_port=$(awk '
-    /^\s*ports:\s*$/ {in_ports=1; next}
-    in_ports && /^\s*-\s*["]?[0-9]+:[0-9]+["]?/ {
-      gsub(/[^0-9:]/, "", $0);
-      split($0, a, ":");
-      print a[1];
-      exit
-    }
-  ' "$dirname/$filename")
+  # 提取 compose 中的第一个端口映射（兼容各种格式）
+  host_port=$(grep -oE '[- ]+["]?[0-9]{2,5}:[0-9]{2,5}["]?' "$dirname/$filename" | \
+              sed -E 's/[^0-9]*([0-9]{2,5}):[0-9]{2,5}.*/\1/' | head -n 1)
 
   if [[ -n "$host_port" ]]; then
     echo "🌐 $dirname 可访问：http://$LOCAL_IP:$host_port"
