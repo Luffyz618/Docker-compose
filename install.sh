@@ -57,10 +57,12 @@ read -p "请输入数字 (0-4): " input
 
 declare -A services=(
   [1]="emby.yaml"
-  [2]="moviepilot.yaml"
+  [2]="moviepilot.yaml"  # 修改这里
   [3]="iyuu.yaml"
   [4]="qbittorrent.yaml"
 )
+
+declare -A service_ips=()  # 用于存储服务和对应的访问IP信息
 
 install_service() {
   filename=$1
@@ -81,26 +83,20 @@ install_service() {
     # 提取 environment 中的 PORT/NGINX_PORT
     env_port=$(grep -E 'NGINX_PORT=|PORT=' "$dirname/$filename" | grep -oE '[0-9]{2,5}' | head -n 1)
     if [[ -n "$env_port" ]]; then
-      echo "🌐 $dirname 可访问：http://$LOCAL_IP:$env_port"
+      service_ips["$filename"]="http://$LOCAL_IP:$env_port"
     else
-      echo "ℹ️ $dirname 使用 host 网络，但未检测到明确端口，请手动确认。"
+      service_ips["$filename"]="ℹ️ $dirname 使用 host 网络，但未检测到明确端口，请手动确认。"
     fi
   else
     # 提取 compose 中的第一个端口映射
     host_port=$(grep -oE '[- ]+["]?[0-9]{2,5}:[0-9]{2,5}["]?' "$dirname/$filename" | \
                 sed -E 's/[^0-9]*([0-9]{2,5}):[0-9]{2,5}.*/\1/' | head -n 1)
     if [[ -n "$host_port" ]]; then
-      echo "🌐 $dirname 可访问：http://$LOCAL_IP:$host_port"
+      service_ips["$filename"]="http://$LOCAL_IP:$host_port"
     else
-      echo "ℹ️ $dirname 没有找到端口映射或无 Web 界面"
+      service_ips["$filename"]="ℹ️ $dirname 没有找到端口映射或无 Web 界面"
     fi
   fi
-
-  # 查看日志
-  echo "📜 查看日志请输入：docker logs -f $dirname"
-  echo "或者使用 docker-compose logs $dirname 来查看容器日志"
-
-  echo
 }
 
 # 处理组合输入（空格或逗号分隔）
@@ -130,4 +126,19 @@ fi
 # 安装所选服务
 for i in "${unique_choices[@]}"; do
   install_service "${services[$i]}"
+done
+
+# 输出所有服务的可访问 IP 地址
+echo
+echo "所有服务安装完成，以下是可访问的服务 IP 地址："
+for service in "${!service_ips[@]}"; do
+  echo "$service: ${service_ips[$service]}"
+done
+
+# 输出查看日志的提示
+echo
+echo "📜 查看日志的方法："
+for service in "${!service_ips[@]}"; do
+  service_name=$(basename "$service" .yaml)
+  echo "查看 $service_name 的日志请输入：docker logs -f $service_name"
 done
