@@ -1,4 +1,3 @@
-version: "3"
 services:
     iyuuplus-dev:
         stdin_open: true
