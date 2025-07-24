@@ -76,14 +76,24 @@ install_service() {
   # 获取内网 IP 地址
   LOCAL_IP=$(hostname -I | awk '{print $1}')
 
-  # 提取 compose 中的第一个端口映射（兼容各种格式）
-  host_port=$(grep -oE '[- ]+["]?[0-9]{2,5}:[0-9]{2,5}["]?' "$dirname/$filename" | \
-              sed -E 's/[^0-9]*([0-9]{2,5}):[0-9]{2,5}.*/\1/' | head -n 1)
-
-  if [[ -n "$host_port" ]]; then
-    echo "🌐 $dirname 可访问：http://$LOCAL_IP:$host_port"
+  # 检查是否使用 host 网络模式
+  if grep -q "network_mode: host" "$dirname/$filename"; then
+    # 提取 environment 中的 PORT/NGINX_PORT
+    env_port=$(grep -E 'NGINX_PORT=|PORT=' "$dirname/$filename" | grep -oE '[0-9]{2,5}' | head -n 1)
+    if [[ -n "$env_port" ]]; then
+      echo "🌐 $dirname 可访问：http://$LOCAL_IP:$env_port"
+    else
+      echo "ℹ️ $dirname 使用 host 网络，但未检测到明确端口，请手动确认。"
+    fi
   else
-    echo "ℹ️ $dirname 没有找到端口映射或无 Web 界面"
+    # 提取 compose 中的第一个端口映射
+    host_port=$(grep -oE '[- ]+["]?[0-9]{2,5}:[0-9]{2,5}["]?' "$dirname/$filename" | \
+                sed -E 's/[^0-9]*([0-9]{2,5}):[0-9]{2,5}.*/\1/' | head -n 1)
+    if [[ -n "$host_port" ]]; then
+      echo "🌐 $dirname 可访问：http://$LOCAL_IP:$host_port"
+    else
+      echo "ℹ️ $dirname 没有找到端口映射或无 Web 界面"
+    fi
   fi
 
   echo
