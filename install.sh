@@ -57,7 +57,7 @@ read -p "请输入数字 (0-4): " input
 
 declare -A services=(
   [1]="emby.yaml"
-  [2]="moviepilot.yaml"  # 修改这里
+  [2]="moviepilot.yaml"
   [3]="iyuu.yaml"
   [4]="qbittorrent.yaml"
 )
