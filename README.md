@@ -27,6 +27,7 @@
 自动输出访问地址
 
 🧰 环境要求
+
 系统：Debian/Ubuntu 等基于 APT 的 Linux 发行版
 
 权限：支持自动检测是否需要 sudo
@@ -34,6 +35,7 @@
 依赖工具：curl, gpg, lsb-release, docker, docker compose
 
 🚀 使用方法
+
 打开终端，ssh连接到NAS或者VPS执行以下命令运行脚本：
 
 ```
