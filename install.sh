@@ -63,6 +63,7 @@ declare -A services=(
 )
 
 declare -A service_ips=()  # 用于存储服务和对应的访问IP信息
+declare -A container_names=()  # 用于存储服务和对应的容器名称
 
 install_service() {
   filename=$1
@@ -97,6 +98,10 @@ install_service() {
       service_ips["$filename"]="ℹ️ $dirname 没有找到端口映射或无 Web 界面"
     fi
   fi
+
+  # 获取容器实际名称
+  container_name=$(docker ps --filter "name=$dirname" --format "{{.Names}}")
+  container_names["$filename"]=$container_name
 }
 
 # 处理组合输入（空格或逗号分隔）
@@ -138,7 +143,7 @@ done
 # 输出查看日志的提示
 echo
 echo "📜 查看日志的方法："
-for service in "${!service_ips[@]}"; do
-  service_name=$(basename "$service" .yaml)
-  echo "查看 $service_name 的日志请输入：docker logs -f $service_name"
+for service in "${!container_names[@]}"; do
+  container_name="${container_names[$service]}"
+  echo "查看 $service 的日志请输入：docker logs -f $container_name"
 done
