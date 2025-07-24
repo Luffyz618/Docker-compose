@@ -57,7 +57,7 @@ read -p "请输入数字 (0-4): " input
 
 declare -A services=(
   [1]="emby.yaml"
-  [2]="mp.yaml"
+  [2]="moviepilot.yaml"  # 修改这里
   [3]="iyuu.yaml"
   [4]="qbittorrent.yaml"
 )
@@ -95,6 +95,10 @@ install_service() {
       echo "ℹ️ $dirname 没有找到端口映射或无 Web 界面"
     fi
   fi
+
+  # 查看日志
+  echo "📜 查看日志请输入：docker logs -f $dirname"
+  echo "或者使用 docker-compose logs $dirname 来查看容器日志"
 
   echo
 }
