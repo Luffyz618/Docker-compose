@@ -90,13 +90,14 @@ if [[ "$1" == "--uninstall" ]]; then
     imagename="${images[$i]}"
 
     echo "🔻 停止并删除服务 $dirname ..."
+
     if [ -f "$dirname/$filename" ]; then
       (cd "$dirname" && docker compose -f "$filename" down)
     else
       docker rm -f "$dirname" &>/dev/null
     fi
 
-    echo "🗑 删除目录 $dirname ..."
+    echo "🗑 删除目录 $dirname 及全部内容..."
     rm -rf "$dirname"
 
     echo "🧼 删除镜像 $imagename ..."
@@ -155,6 +156,32 @@ declare -A container_names=()
 install_service() {
   filename=$1
   dirname="${filename%.*}"
+
+  existing_container=$(docker ps -a --filter "name=^${dirname}$" --format '{{.Names}}')
+  if [[ "$existing_container" == "$dirname" ]]; then
+    echo "⚠️ 服务 $dirname 容器已存在，跳过安装。"
+    container_names["$filename"]=$dirname
+    LOCAL_IP=$(hostname -I | awk '{print $1}')
+    case "$filename" in
+      plex.yaml)
+        service_ips["$filename"]="http://$LOCAL_IP:32400"
+        ;;
+      lucky.yaml)
+        service_ips["$filename"]="http://$LOCAL_IP:16601"
+        ;;
+      *)
+        ports=$(docker port "$dirname" 2>/dev/null | head -n1)
+        if [[ -n "$ports" ]]; then
+          host_port=$(echo "$ports" | sed -E 's/.*:(.*)/\1/')
+          service_ips["$filename"]="http://$LOCAL_IP:$host_port"
+        else
+          service_ips["$filename"]="ℹ️ $dirname 已存在，但未能自动检测端口，请手动确认。"
+        fi
+        ;;
+    esac
+    return
+  fi
+
   echo "📦 正在安装：$filename"
   mkdir -p "$dirname"
   curl -fsSL "$REPO_URL/$filename" -o "$dirname/$filename"
@@ -165,7 +192,6 @@ install_service() {
 
   LOCAL_IP=$(hostname -I | awk '{print $1}')
 
-  # Plex / Lucky 特殊处理
   case "$filename" in
     plex.yaml)
       service_ips["$filename"]="http://$LOCAL_IP:32400"
