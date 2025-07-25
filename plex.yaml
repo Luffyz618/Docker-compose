@@ -1,0 +1,14 @@
+﻿services:
+  plex:
+    image: linuxserver/plex:latest
+    container_name: plex
+    network_mode: host  # 建议使用 host 模式以支持 DLNA 和广播发现功能
+    environment:
+      - PUID=0        # 替换为你的用户ID
+      - PGID=0           # 替换为你的组ID
+      - VERSION=docker      # 使用docker版
+      - TZ=Asia/Shanghai    # 设置时区
+    volumes:
+      - ./config:/config              # 配置文件保存位置
+    restart: unless-stopped
+

@@ -1,0 +1,13 @@
+---
+services:
+  jellyseerr:
+    image: ghcr.io/fallenbagel/jellyseerr:latest
+    container_name: jellyseerr
+    environment:
+      - TZ=Asia/Shanghai
+      - PORT=5055 #optional
+    ports:
+      - 5055:5055
+    volumes:
+      - ./config:/app/config
+    restart: unless-stopped
