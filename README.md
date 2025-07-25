@@ -13,7 +13,9 @@
 | 2    | MoviePilot   | 3000     | 自动电影信息获取与整理工具   |
 | 3    | IYUU         | 8780     | PT 辅助工具，用于辅种、自动转移做种 |
 | 4    | qBittorrent  | 8080     | 高性能 BT 下载客户端         |
-
+| 5    | Plex         | 32400    | 强大的媒体服务器                  |
+| 6    | Lucky        | 16601    | 影视搜索与索引工具                |
+| 7    | Jellyseerr   | 5055     | 媒体管理面板                      |
 
 📋 脚本功能
 自动检测并安装 Docker 和 Compose 插件
@@ -25,6 +27,8 @@
 自动创建服务目录并运行容器
 
 自动输出访问地址
+
+新增卸载模式：可停止容器、删除镜像和目录
 
 🧰 环境要求
 
@@ -54,6 +58,11 @@ bash <(curl -fsSL https://raw.githubusercontent.com/Luffyz618/Docker-compose/mai
 安装完成后，终端会显示每个服务的访问地址，例如：
 ```
 🌐 emby 可访问：http://192.168.1.100:8096
+```
+
+<strong>卸载功能</strong>
+```
+bash <(curl -fsSL https://raw.githubusercontent.com/Luffyz618/Docker-compose/main/install.sh) --uninstall
 ```
 
 ❗ 注意事项
