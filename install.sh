@@ -41,7 +41,9 @@ if [[ "$1" == "--uninstall" ]]; then
   echo "5 - Plex"
   echo "6 - Lucky"
   echo "7 - Jellyseerr"
-  read -p "请输入数字 (0-7): " input
+  echo "8 - FileBrowser"
+  echo "9 - Transmission"
+  read -p "请输入数字 (0-9): " input
 
   declare -A services=(
     [1]="emby.yaml"
@@ -51,6 +53,8 @@ if [[ "$1" == "--uninstall" ]]; then
     [5]="plex.yaml"
     [6]="lucky.yaml"
     [7]="jellyseerr.yaml"
+    [8]="filebrowser.yaml"
+    [9]="transmission.yaml"
   )
 
   declare -A images=(
@@ -61,12 +65,14 @@ if [[ "$1" == "--uninstall" ]]; then
     [5]="plexinc/pms-docker"
     [6]="luckyz0311/lucky"
     [7]="fallenbagel/jellyseerr"
+    [8]="filebrowser/filebrowser"
+    [9]="linuxserver/transmission"
   )
 
   input_clean=$(echo "$input" | tr ',' ' ')
   choices=()
   for i in $input_clean; do
-    if [[ "$i" =~ ^[0-7]$ ]]; then
+    if [[ "$i" =~ ^[0-9]$ ]]; then
       choices+=("$i")
     else
       echo "⚠️ 无效选项已忽略: $i"
@@ -74,7 +80,7 @@ if [[ "$1" == "--uninstall" ]]; then
   done
 
   if [[ " ${choices[*]} " =~ " 0 " ]]; then
-    choices=(1 2 3 4 5 6 7)
+    choices=(1 2 3 4 5 6 7 8 9)
   fi
 
   unique_choices=($(echo "${choices[@]}" | tr ' ' '\n' | sort -n | uniq))
@@ -138,7 +144,9 @@ echo "4 - qBittorrent"
 echo "5 - Plex"
 echo "6 - Lucky"
 echo "7 - Jellyseerr"
-read -p "请输入数字 (0-7): " input
+echo "8 - FileBrowser"
+echo "9 - Transmission"
+read -p "请输入数字 (0-9): " input
 
 declare -A services=(
   [1]="emby.yaml"
@@ -148,6 +156,8 @@ declare -A services=(
   [5]="plex.yaml"
   [6]="lucky.yaml"
   [7]="jellyseerr.yaml"
+  [8]="filebrowser.yaml"
+  [9]="transmission.yaml"
 )
 
 declare -A service_ips=()
@@ -226,7 +236,7 @@ install_service() {
 input_clean=$(echo "$input" | tr ',' ' ')
 choices=()
 for i in $input_clean; do
-  if [[ "$i" =~ ^[0-7]$ ]]; then
+  if [[ "$i" =~ ^[0-9]$ ]]; then
     choices+=("$i")
   else
     echo "⚠️ 无效选项已忽略: $i"
@@ -234,7 +244,7 @@ for i in $input_clean; do
 done
 
 if [[ " ${choices[*]} " =~ " 0 " ]]; then
-  choices=(1 2 3 4 5 6 7)
+  choices=(1 2 3 4 5 6 7 8 9)
 fi
 
 unique_choices=($(echo "${choices[@]}" | tr ' ' '\n' | sort -n | uniq))
@@ -250,8 +260,13 @@ done
 
 echo
 echo "所有服务安装完成，以下是可访问的服务 IP 地址："
-for service in "${!service_ips[@]}"; do
-  echo "$service: ${service_ips[$service]}"
+for i in "${unique_choices[@]}"; do
+  filename="${services[$i]}"
+  echo "$filename: ${service_ips[$filename]}"
+  if [[ "$filename" == "transmission.yaml" ]]; then
+    echo "  默认用户名：admin"
+    echo "  默认密码：password"
+  fi
 done
 
 echo
