@@ -7,6 +7,3 @@
       - "8082:8082"
     volumes:
       - ./config:/config
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
