@@ -1,0 +1,18 @@
+﻿services:
+  transmission:
+    image: lscr.io/linuxserver/transmission:4.0.5
+    container_name: transmission
+    environment:
+      - PUID=0
+      - PGID=0
+      - TZ=Asia/Shanghai
+      - TRANSMISSION_WEB_HOME=/webui
+      - USER=admin
+      - PASS=password
+    volumes:
+      - ./config:/config
+      - ./watch:/watch
+      - ./webui:/webui
+    ports:
+      - 9091:9091
+    restart: unless-stopped
