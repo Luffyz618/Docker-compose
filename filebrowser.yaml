@@ -1,0 +1,12 @@
+﻿services:
+  filebrowser:
+    image: 80x86/filebrowser:2.9.3-amd64
+    container_name: filebrowser
+    restart: unless-stopped
+    ports:
+      - "8082:8082"
+    volumes:
+      - ./config:/config
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
