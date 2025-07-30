@@ -69,6 +69,10 @@ if [[ "$1" == "--uninstall" ]]; then
     [9]="linuxserver/transmission"
   )
 
+  declare -A container_dirs=(
+    [moviepilot.yaml]="moviepilot-v2"
+  )
+
   input_clean=$(echo "$input" | tr ',' ' ')
   choices=()
   for i in $input_clean; do
@@ -92,7 +96,7 @@ if [[ "$1" == "--uninstall" ]]; then
 
   for i in "${unique_choices[@]}"; do
     filename="${services[$i]}"
-    dirname="${filename%.*}"
+    dirname="${container_dirs[$filename]:-${filename%.*}}"
     imagename="${images[$i]}"
 
     echo "🔻 停止并删除服务 $dirname ..."
@@ -160,12 +164,16 @@ declare -A services=(
   [9]="transmission.yaml"
 )
 
+declare -A container_dirs=(
+  [moviepilot.yaml]="moviepilot-v2"
+)
+
 declare -A service_ips=()
 declare -A container_names=()
 
 install_service() {
   filename=$1
-  dirname="${filename%.*}"
+  dirname="${container_dirs[$filename]:-${filename%.*}}"
 
   existing_container=$(docker ps -a --filter "name=^${dirname}$" --format '{{.Names}}')
   if [[ "$existing_container" == "$dirname" ]]; then
