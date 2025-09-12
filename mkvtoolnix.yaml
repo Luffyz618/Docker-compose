@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  mkvtoolnix:
+    image: jlesage/mkvtoolnix
+    container_name: mkvtoolnix
+    ports:
+      - "5800:5800"               # Web 界面访问端口
+    volumes:
+      - ./media:/storage   # 媒体文件存储映射
+      - ./config:/config       # 配置目录持久化
+    environment:
+      - TZ=Asia/Shanghai              # 时区设置
+      - ENABLE_CJK_FONT=1             # 中日韩字体支持
+    restart: unless-stopped            # 自动重启策略
