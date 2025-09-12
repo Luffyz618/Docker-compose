@@ -6,17 +6,18 @@ services:
         container_name: moviepilot-v2
         hostname: moviepilot-v2
 
-        network_mode: host
-        # networks:
-        #   - moviepilot
-        # ports:
-        #    - target: 3000
-        #      published: 3000
-        #      protocol: tcp
+        # 改为 bridge 模式并映射端口
+        network_mode: bridge
+        ports:
+            - "3006:3006"   # NGINX 端口映射
+            - "3001:3001"    # MoviePilot 内部端口映射
+
         volumes:
             - './config:/config'
             - './core:/moviepilot/.cache/ms-playwright'
             - '/var/run/docker.sock:/var/run/docker.sock:ro'
+            - '/115MP:/115MP'
+
         environment:
             - 'NGINX_PORT=3006'
             - 'PORT=3001'
@@ -28,10 +29,10 @@ services:
             # - 'IYUU_SIGN=xxx'
             # - 'SUPERUSER=admin'
             # - 'API_TOKEN=无需手动配置，系统会自动生成。如果需要自定义配置，必须为16位以上的复杂字符串'
+
         restart: always
         image: jxxghp/moviepilot-v2:latest
 
 networks:
   moviepilot:
     name: moviepilot
-
