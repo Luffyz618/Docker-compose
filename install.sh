@@ -43,7 +43,8 @@ if [[ "$1" == "--uninstall" ]]; then
   echo "7 - Jellyseerr"
   echo "8 - FileBrowser"
   echo "9 - Transmission"
-  read -p "请输入数字 (0-9): " input
+  echo "10 - MKVToolNix"
+  read -p "请输入数字 (0-10): " input
 
   declare -A services=(
     [1]="emby.yaml"
@@ -55,6 +56,7 @@ if [[ "$1" == "--uninstall" ]]; then
     [7]="jellyseerr.yaml"
     [8]="filebrowser.yaml"
     [9]="transmission.yaml"
+    [10]="mkvtoolnix.yaml"
   )
 
   declare -A images=(
@@ -67,6 +69,7 @@ if [[ "$1" == "--uninstall" ]]; then
     [7]="fallenbagel/jellyseerr"
     [8]="filebrowser/filebrowser"
     [9]="linuxserver/transmission"
+    [10]="jlesage/mkvtoolnix"
   )
 
   declare -A container_dirs=(
@@ -76,7 +79,7 @@ if [[ "$1" == "--uninstall" ]]; then
   input_clean=$(echo "$input" | tr ',' ' ')
   choices=()
   for i in $input_clean; do
-    if [[ "$i" =~ ^[0-9]$ ]]; then
+    if [[ "$i" =~ ^[0-9]+$ ]]; then
       choices+=("$i")
     else
       echo "⚠️ 无效选项已忽略: $i"
@@ -84,7 +87,7 @@ if [[ "$1" == "--uninstall" ]]; then
   done
 
   if [[ " ${choices[*]} " =~ " 0 " ]]; then
-    choices=(1 2 3 4 5 6 7 8 9)
+    choices=(1 2 3 4 5 6 7 8 9 10)
   fi
 
   unique_choices=($(echo "${choices[@]}" | tr ' ' '\n' | sort -n | uniq))
@@ -150,7 +153,8 @@ echo "6 - Lucky"
 echo "7 - Jellyseerr"
 echo "8 - FileBrowser"
 echo "9 - Transmission"
-read -p "请输入数字 (0-9): " input
+echo "10 - MKVToolNix"
+read -p "请输入数字 (0-10): " input
 
 declare -A services=(
   [1]="emby.yaml"
@@ -162,6 +166,7 @@ declare -A services=(
   [7]="jellyseerr.yaml"
   [8]="filebrowser.yaml"
   [9]="transmission.yaml"
+  [10]="mkvtoolnix.yaml"
 )
 
 declare -A container_dirs=(
@@ -244,7 +249,7 @@ install_service() {
 input_clean=$(echo "$input" | tr ',' ' ')
 choices=()
 for i in $input_clean; do
-  if [[ "$i" =~ ^[0-9]$ ]]; then
+  if [[ "$i" =~ ^[0-9]+$ ]]; then
     choices+=("$i")
   else
     echo "⚠️ 无效选项已忽略: $i"
@@ -252,7 +257,7 @@ for i in $input_clean; do
 done
 
 if [[ " ${choices[*]} " =~ " 0 " ]]; then
-  choices=(1 2 3 4 5 6 7 8 9)
+  choices=(1 2 3 4 5 6 7 8 9 10)
 fi
 
 unique_choices=($(echo "${choices[@]}" | tr ' ' '\n' | sort -n | uniq))
