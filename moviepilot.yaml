@@ -18,7 +18,7 @@ services:
             - './core:/moviepilot/.cache/ms-playwright'
             - '/var/run/docker.sock:/var/run/docker.sock:ro'
         environment:
-            - 'NGINX_PORT=3000'
+            - 'NGINX_PORT=3006'
             - 'PORT=3001'
             - 'PUID=0'
             - 'PGID=0'
@@ -34,3 +34,4 @@ services:
 networks:
   moviepilot:
     name: moviepilot
+
