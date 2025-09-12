@@ -18,7 +18,7 @@
 | 7    | Jellyseerr    | 5055     | 媒体管理面板                           |
 | 8    | FileBrowser   | 8082     | 轻量级文件浏览器                       |
 | 9    | Transmission  | 9091     | 简洁高效的 BT 下载工具 |
-
+| 10    | MKVToolNix  | 5800     | Remux混流封装工具 |
 
 📋 脚本功能
 自动检测并安装 Docker 和 Compose 插件
