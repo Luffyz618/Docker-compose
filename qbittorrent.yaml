@@ -1,6 +1,6 @@
 services:
   qbittorrent:
-    image: linuxserver/qbittorrent:latest  # 可替换为特定版本如 `4.6.7`
+    image: linuxserver/qbittorrent:5.1.2  # 可替换为特定版本如 `4.6.7`
     container_name: qbittorrent
     environment:
       - WEBUI_PORT=8080  # Web界面访问端口
