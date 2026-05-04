@@ -1,7 +1,7 @@
 services:
   emby:
     image: emby/embyserver:latest
-    platform: linux/arm64/v8 # ARM处理器取消这行注释
+    platform: linux/arm64 # ARM处理器取消这行注释
     container_name: emby
     restart: unless-stopped
     network_mode: bridge  # 或使用 host 模式（见下方说明）
